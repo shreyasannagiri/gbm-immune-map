@@ -31,7 +31,7 @@ jobs:
       - run: npm run build
 
       # social-preview image, referenced by the og:image meta tag
-      - run: cp docs/preview.jpg dist/preview.jpg
+      - run: cp docs/og.jpg dist/og.jpg
 
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
