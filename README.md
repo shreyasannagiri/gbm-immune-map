@@ -1,6 +1,6 @@
 # The glioblastoma immune microenvironment
 
-### → **[dyanzanchi.github.io/gbm-immune-map](https://dyanzanchi.github.io/gbm-immune-map/)**
+### → **[shreyasannagiri.github.io/gbm-immune-map](https://shreyasannagiri.github.io/gbm-immune-map/)**
 
 An interactive map of immunosuppression and immunotherapy resistance in GBM,
 built for display on a lab website.
@@ -144,7 +144,7 @@ gh run watch
 To put the figure on another site (a lab page, a course page), embed it:
 
 ```html
-<iframe src="https://dyanzanchi.github.io/gbm-immune-map/"
+<iframe src="https://shreyasannagiri.github.io/gbm-immune-map/"
         title="GBM immune microenvironment"
         style="width:100%;height:820px;border:0"></iframe>
 ```
