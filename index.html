@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Immunosuppression in the glioblastoma microenvironment</title>
+    <meta
+      name="description"
+      content="An interactive map of the mechanisms of immunotherapy resistance in glioblastoma, after Jackson, Choi & Lim, Nature Immunology 2019."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;1,6..72,300&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/src/styles/app.css" />
+  </head>
+  <body>
+    <div class="app">
+      <!-- ───────────────────────────────── header -->
+      <header class="topbar">
+        <div class="brand">
+          <h1>The glioblastoma immune microenvironment</h1>
+          <p class="sub">
+            Mechanisms of immunosuppression and immunotherapy resistance ·
+            interactive map
+          </p>
+        </div>
+        <div class="topbar-actions">
+          <button class="btn btn-primary" id="tour-btn">
+            <span class="btn-icon" aria-hidden="true">▶</span> Start walkthrough
+          </button>
+          <div class="zoom-group" role="group" aria-label="Zoom">
+            <button class="btn btn-icon-only" id="zoom-out" title="Zoom out" aria-label="Zoom out">−</button>
+            <button class="btn btn-icon-only" id="zoom-in" title="Zoom in" aria-label="Zoom in">+</button>
+            <button class="btn btn-icon-only" id="zoom-reset" title="Reset view" aria-label="Reset view">⟲</button>
+          </div>
+        </div>
+      </header>
+
+      <!-- ───────────────────────────────── left rail -->
+      <aside class="rail">
+        <section class="rail-block">
+          <h2 class="rail-title">
+            Mechanism layers
+            <button class="link-btn" id="layers-toggle">none</button>
+          </h2>
+          <div class="layer-list" id="layer-list"></div>
+        </section>
+
+        <section class="rail-block">
+          <h2 class="rail-title">Cells in the niche</h2>
+          <div class="cell-list" id="cell-list"></div>
+        </section>
+
+        <footer class="rail-foot">
+          <p class="cite-label">Content follows</p>
+          <p class="cite" id="citation"></p>
+        </footer>
+      </aside>
+
+      <!-- ───────────────────────────────── stage -->
+      <main class="stage">
+        <div class="scene-host" id="scene-host"></div>
+
+        <div class="tour-bar" id="tour-bar" hidden>
+          <button class="btn btn-ghost" id="tour-prev">← Back</button>
+          <div class="tour-dots" id="tour-dots"></div>
+          <button class="btn btn-primary" id="tour-next">Next →</button>
+          <button class="btn btn-ghost btn-close" id="tour-exit" title="Exit walkthrough">Exit</button>
+        </div>
+
+        <p class="stage-hint" id="stage-hint">
+          Hover a cell to isolate its interactions · click any label for the mechanism · scroll to zoom
+        </p>
+      </main>
+
+      <!-- ───────────────────────────────── detail panel -->
+      <aside class="panel" id="panel" aria-live="polite"></aside>
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
