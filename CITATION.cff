@@ -1,0 +1,52 @@
+cff-version: 1.2.0
+title: >-
+  The glioblastoma immune microenvironment: an interactive map of
+  immunosuppression
+message: >-
+  If you use or adapt this figure, please cite it together with the review it
+  represents (listed under references).
+type: software
+authors:
+  - family-names: Annagiri
+    given-names: Shreyas
+    affiliation: >-
+      Lim Lab, Department of Neurosurgery, Stanford University
+abstract: >-
+  An interactive visualisation of the mechanisms of immunosuppression and
+  immunotherapy resistance in glioblastoma: ten cell types of the tumour niche
+  and 26 mechanisms across seven layers (immune checkpoints, antigen
+  presentation, cytokines and chemokines, myeloid reprogramming, metabolic
+  suppression, hypoxia and vasculature, and T-cell dysfunction and
+  sequestration). All content derives from Jackson, Choi and Lim, Nature
+  Immunology 2019; the figure reports no new data.
+keywords:
+  - glioblastoma
+  - immunotherapy resistance
+  - tumour microenvironment
+  - immunosuppression
+  - neuro-oncology
+  - data visualisation
+url: 'https://shreyasannagiri.github.io/gbm-immune-map/'
+repository-code: 'https://github.com/shreyasannagiri/gbm-immune-map'
+date-released: '2026-11-23'
+references:
+  - type: article
+    title: 'Mechanisms of immunotherapy resistance: lessons from glioblastoma'
+    authors:
+      - family-names: Jackson
+        given-names: Christopher M.
+      - family-names: Choi
+        given-names: John
+      - family-names: Lim
+        given-names: Michael
+    journal: Nature Immunology
+    volume: 20
+    issue: 9
+    start: 1100
+    end: 1109
+    year: 2019
+    doi: 10.1038/s41590-019-0433-y
+    identifiers:
+      - type: other
+        value: 'PMID:31358997'
+        description: PubMed identifier

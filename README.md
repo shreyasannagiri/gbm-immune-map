@@ -1,14 +1,35 @@
 # The glioblastoma immune microenvironment
 
+**Lim Lab · Department of Neurosurgery, Stanford University**
+
 ### → **[shreyasannagiri.github.io/gbm-immune-map](https://shreyasannagiri.github.io/gbm-immune-map/)**
 
-An interactive map of immunosuppression and immunotherapy resistance in GBM,
-built for display on a lab website.
+An interactive map of immunosuppression and immunotherapy resistance in GBM.
 
-Scientific content follows **Jackson CM, Choi J, Lim M.** *Mechanisms of
-immunotherapy resistance: lessons from glioblastoma.* Nature Immunology
-2019;20(9):1100–1109. [doi:10.1038/s41590-019-0433-y](https://doi.org/10.1038/s41590-019-0433-y)
-· [PMID 31358997](https://pubmed.ncbi.nlm.nih.gov/31358997/)
+## The source
+
+This figure represents one paper:
+
+> **Jackson CM, Choi J, Lim M.** *Mechanisms of immunotherapy resistance:
+> lessons from glioblastoma.* **Nature Immunology.** 2019;20(9):1100–1109.
+> [doi:10.1038/s41590-019-0433-y](https://doi.org/10.1038/s41590-019-0433-y)
+> · [PMID 31358997](https://pubmed.ncbi.nlm.nih.gov/31358997/)
+
+Every cell, mechanism and claim on the map is drawn from that review. The
+figure is an interpretation of it for teaching and discussion and reports no
+new data; where the review cites primary work, follow its reference list.
+
+### Citing the figure
+
+> Annagiri S. The glioblastoma immune microenvironment: an interactive map of
+> immunosuppression [Internet]. Lim Lab, Department of Neurosurgery, Stanford
+> University; 2026. Adapted from Jackson CM, Choi J, Lim M. Mechanisms of
+> immunotherapy resistance: lessons from glioblastoma. Nat Immunol.
+> 2019;20(9):1100–1109. Available from:
+> https://shreyasannagiri.github.io/gbm-immune-map/
+
+The page itself carries a copy-ready version of this, and `CITATION.cff` gives
+GitHub's "Cite this repository" button the same information.
 
 ![The figure, with all seven mechanism layers visible](docs/preview.jpg)
 
@@ -102,12 +123,57 @@ src/
 ```
 
 **Editing the science.** Everything a reader sees lives in `src/data/model.js`.
-To add a mechanism, append an entry to `MECHANISMS` with a `layer`, a `kind`
-(`synapse` for receptor–ligand pairs, `soluble` for secreted factors, `state`
-for intrinsic cell properties), the cells it connects, and its text. Labels
-place themselves: authored offsets are treated as preferences and a relaxation
-pass in `relaxLabels()` keeps pills from colliding with each other or with
-cells, for any combination of visible layers.
+Labels place themselves: authored offsets are treated as preferences and a
+relaxation pass in `relaxLabels()` keeps pills from colliding with each other
+or with cells, for any combination of visible layers.
+
+*To add a mechanism*, append an entry to `MECHANISMS`:
+
+```js
+{
+  id: 'cd73-tumour',
+  layer: 'metabolic',          // one of the LAYERS ids
+  kind: 'soluble',             // synapse | soluble | state
+  from: 'gbm', to: 'cd8',      // or `at: 'gbm'` for kind: 'state'
+  label: 'CD73 → adenosine',   // the pill on the map
+  bend: 40,                    // or via: {x, y} to route it by hand
+  lab: { dx: 60, dy: -30 },    // label nudge; the solver does the rest
+  title: 'Tumour CD73 — …',
+  molecules: ['CD73 (NT5E)', 'Adenosine'],
+  summary: 'One or two sentences, plain language.',
+  detail: 'A paragraph as the source frames it.',
+  therapy: 'What this implies for treatment.',
+  refs: ['smith2024'],         // omit to credit the primary review
+}
+```
+
+*To add a paper*, add it to `REFERENCES` in the same file and list its id in
+the `refs` array of each mechanism it supports:
+
+```js
+smith2024: {
+  id: 'smith2024',
+  authors: 'Smith AB, Jones CD',
+  title: 'Title of the paper',
+  journal: 'Nature Medicine', journalAbbrev: 'Nat Med',
+  year: 2024, volume: '30', issue: '4', pages: '512–524',
+  doi: '10.1038/…', pmid: '12345678',
+  doiUrl: 'https://doi.org/10.1038/…',
+  pubmed: 'https://pubmed.ncbi.nlm.nih.gov/12345678/',
+  short: 'Smith & Jones 2024',
+}
+```
+
+Each mechanism's panel then shows and links its own sources. Mechanisms with
+no `refs` fall back to `PRIMARY_REF`, so nothing existing has to change. If the
+figure grows past this one review, update the scope note in the intro panel
+and in "The source" above, so the page keeps saying exactly where its content
+comes from.
+
+*To add a cell*, append to `CELLS` with a position, radius, colour and one of
+the renderer `kind`s in `src/render/cells.js` (`tumor`, `stem`, `lymphocyte`,
+`nk`, `macrophage`, `microglia`, `dendritic`, `mdsc`) — or write a new
+renderer there if the morphology calls for one.
 
 **The artwork is code.** `render/cells.js` generates each cell from seeded
 noise — Catmull-Rom membrane outlines that morph via SMIL, gradient-shaded

@@ -6,12 +6,18 @@
 import {
   CELLS,
   CHAPTERS,
+  CREDIT,
+  LAB,
   LAYERS,
   MECHANISMS,
   PAPER,
+  PRIMARY_REF,
   cellById,
+  figureCitation,
+  formatCitation,
   layerById,
   mechById,
+  refsFor,
 } from './data/model.js';
 import { buildScene, attachViewControls, relaxLabels } from './render/scene.js';
 
@@ -93,9 +99,15 @@ function buildCellList() {
 }
 
 document.getElementById('citation').innerHTML =
-  `${PAPER.authors}. <em>${PAPER.title}.</em> ${PAPER.citation}.
-   <a href="${PAPER.pubmed}" target="_blank" rel="noopener">PubMed</a> ·
-   <a href="${PAPER.doiUrl}" target="_blank" rel="noopener">doi</a>`;
+  `${PRIMARY_REF.authors}. <em>${PRIMARY_REF.title}.</em>
+   ${PRIMARY_REF.journalAbbrev}. ${PRIMARY_REF.year};${PRIMARY_REF.volume}(${PRIMARY_REF.issue}):${PRIMARY_REF.pages}.
+   <span class="cite-links">
+     <a href="${PRIMARY_REF.doiUrl}" target="_blank" rel="noopener">doi:${PRIMARY_REF.doi}</a> ·
+     <a href="${PRIMARY_REF.pubmed}" target="_blank" rel="noopener">PMID ${PRIMARY_REF.pmid}</a>
+   </span>`;
+
+document.getElementById('credit').innerHTML =
+  `${CREDIT.author} · ${LAB.name}<br /><span class="credit-dept">${LAB.department}, ${LAB.institution}</span>`;
 
 const layersToggle = document.getElementById('layers-toggle');
 layersToggle.addEventListener('click', () => {
@@ -285,10 +297,32 @@ function renderPanel() {
           ).join('')}
         </div>
 
-        <p class="panel-cite">
-          ${PAPER.authors}. <em>${PAPER.title}.</em><br />
-          ${PAPER.journal} ${PAPER.year};20(9):1100–1109.
-          <a href="${PAPER.doiUrl}" target="_blank" rel="noopener">doi:${PAPER.doi}</a>
+        <section class="source-block">
+          <h3>The source</h3>
+          <p class="source-cite">
+            ${PRIMARY_REF.authors}.
+            <em>${PRIMARY_REF.title}.</em>
+            ${PRIMARY_REF.journal}. ${PRIMARY_REF.year};${PRIMARY_REF.volume}(${PRIMARY_REF.issue}):${PRIMARY_REF.pages}.
+          </p>
+          <p class="source-links">
+            <a href="${PRIMARY_REF.doiUrl}" target="_blank" rel="noopener">doi:${PRIMARY_REF.doi}</a>
+            <a href="${PRIMARY_REF.pubmed}" target="_blank" rel="noopener">PubMed ${PRIMARY_REF.pmid}</a>
+          </p>
+          <p class="source-note">
+            Every cell, mechanism and claim on this map is drawn from this review.
+            The figure is an interpretation of that paper for teaching and
+            discussion — it reports no new data. Where the review cites primary
+            work, follow its reference list.
+          </p>
+
+          <h3 class="cite-this-h">Cite this figure</h3>
+          <p class="cite-this" id="cite-this">${figureCitation()}</p>
+          <button class="copy-btn" id="copy-cite" type="button">Copy citation</button>
+        </section>
+
+        <p class="panel-credit">
+          Built by ${CREDIT.author} · ${LAB.name}, ${LAB.department},
+          ${LAB.institution}
         </p>
       </div>`;
     return;
@@ -361,6 +395,16 @@ function renderPanel() {
         <p>${m.therapy}</p>
       </div>
 
+      <p class="mech-source">
+        Source:
+        ${refsFor(m)
+          .map(
+            (r) =>
+              `<a href="${r.doiUrl}" target="_blank" rel="noopener">${r.short}</a>`
+          )
+          .join(', ')}
+      </p>
+
       <h3 class="sect">Also in this layer</h3>
       ${MECHANISMS.filter((x) => x.layer === m.layer && x.id !== m.id && state.active.has(x.layer))
         .map(mechRow)
@@ -368,7 +412,25 @@ function renderPanel() {
     </div>`;
 }
 
-panel.addEventListener('click', (e) => {
+panel.addEventListener('click', async (e) => {
+  const copy = e.target.closest('#copy-cite');
+  if (copy) {
+    try {
+      await navigator.clipboard.writeText(figureCitation());
+      copy.textContent = 'Copied';
+    } catch {
+      // clipboard blocked (http, or an embedded frame) — select it instead
+      const node = document.getElementById('cite-this');
+      const range = document.createRange();
+      range.selectNodeContents(node);
+      const sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(range);
+      copy.textContent = 'Selected — press Cmd-C';
+    }
+    setTimeout(() => (copy.textContent = 'Copy citation'), 2400);
+    return;
+  }
   const jm = e.target.closest('[data-jump-mech]');
   if (jm) return select('mech', jm.dataset.jumpMech);
   const jc = e.target.closest('[data-jump-cell]');

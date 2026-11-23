@@ -10,16 +10,79 @@
  * composition reads clearly; label offsets are tuned per mechanism.
  */
 
-export const PAPER = {
-  authors: 'Jackson CM, Choi J, Lim M',
-  title: 'Mechanisms of immunotherapy resistance: lessons from glioblastoma',
-  journal: 'Nature Immunology',
-  year: 2019,
-  citation: 'Nat Immunol. 2019;20(9):1100–1109',
-  doi: '10.1038/s41590-019-0433-y',
-  doiUrl: 'https://doi.org/10.1038/s41590-019-0433-y',
-  pubmed: 'https://pubmed.ncbi.nlm.nih.gov/31358997/',
+/* ------------------------------------------------------------ attribution */
+
+export const LAB = {
+  name: 'Lim Lab',
+  department: 'Department of Neurosurgery',
+  institution: 'Stanford University',
+  line: 'Lim Lab · Department of Neurosurgery, Stanford University',
+  short: 'Lim Lab · Stanford Neurosurgery',
 };
+
+export const CREDIT = {
+  author: 'Shreyas Annagiri',
+  authorCitation: 'Annagiri S',
+  year: 2026,
+  url: 'https://shreyasannagiri.github.io/gbm-immune-map/',
+};
+
+/* -------------------------------------------------------------- references */
+
+/**
+ * Every source the figure draws on, keyed by id.
+ *
+ * To add a paper: add an entry here, then list its id in the `refs` array of
+ * each mechanism it supports. Mechanisms with no `refs` fall back to
+ * PRIMARY_REF, so existing content needs no edits.
+ */
+export const REFERENCES = {
+  jackson2019: {
+    id: 'jackson2019',
+    authors: 'Jackson CM, Choi J, Lim M',
+    title: 'Mechanisms of immunotherapy resistance: lessons from glioblastoma',
+    journal: 'Nature Immunology',
+    journalAbbrev: 'Nat Immunol',
+    year: 2019,
+    volume: '20',
+    issue: '9',
+    pages: '1100–1109',
+    type: 'Review',
+    doi: '10.1038/s41590-019-0433-y',
+    pmid: '31358997',
+    doiUrl: 'https://doi.org/10.1038/s41590-019-0433-y',
+    pubmed: 'https://pubmed.ncbi.nlm.nih.gov/31358997/',
+    short: 'Jackson, Choi & Lim 2019',
+    primary: true,
+  },
+};
+
+/** The review this figure was built to represent. */
+export const PRIMARY_REF = REFERENCES.jackson2019;
+
+/** Vancouver-style reference string. */
+export function formatCitation(r = PRIMARY_REF) {
+  return `${r.authors}. ${r.title}. ${r.journalAbbrev}. ${r.year};${r.volume}(${r.issue}):${r.pages}.`;
+}
+
+/** Sources behind one mechanism; defaults to the primary review. */
+export function refsFor(m) {
+  return (m.refs || [PRIMARY_REF.id]).map((id) => REFERENCES[id]).filter(Boolean);
+}
+
+/** How a reader should cite this figure. */
+export function figureCitation() {
+  return (
+    `${CREDIT.authorCitation}. The glioblastoma immune microenvironment: ` +
+    `an interactive map of immunosuppression [Internet]. ${LAB.name}, ` +
+    `${LAB.department}, ${LAB.institution}; ${CREDIT.year}. ` +
+    `Adapted from ${formatCitation(PRIMARY_REF)} ` +
+    `Available from: ${CREDIT.url}`
+  );
+}
+
+/** Kept as the long-standing name used across the UI. */
+export const PAPER = PRIMARY_REF;
 
 export const VIEW = { w: 1280, h: 820 };
 
