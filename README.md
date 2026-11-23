@@ -1,5 +1,7 @@
 # The glioblastoma immune microenvironment
 
+### → **[dyanzanchi.github.io/gbm-immune-map](https://dyanzanchi.github.io/gbm-immune-map/)**
+
 An interactive map of immunosuppression and immunotherapy resistance in GBM,
 built for display on a lab website.
 
@@ -123,9 +125,30 @@ respected.
 - `legacy/` holds the previous implementation and its image assets; nothing in
   the current build references it, and it can be deleted at any time.
 
-## Published link
+## Deployment
 
-A private, shareable copy of the figure is published at
-<https://claude.ai/artifact/KsEnaYGen9xdbSFyQ5jejZ>. Only you can open it
-until you share it from the page's Share menu. Republish after changes with
-`npm run build:artifact`, then publish `dist/artifact.html` to the same URL.
+The site is served by GitHub Pages from this repository. The workflow in
+`.github/workflows/deploy.yml` rebuilds and republishes on every push to
+`main` — there is no manual deploy step:
+
+```bash
+git add -A && git commit -m "describe the change" && git push
+```
+
+The live site updates about a minute later. To watch a deploy:
+
+```bash
+gh run watch
+```
+
+To put the figure on another site (a lab page, a course page), embed it:
+
+```html
+<iframe src="https://dyanzanchi.github.io/gbm-immune-map/"
+        title="GBM immune microenvironment"
+        style="width:100%;height:820px;border:0"></iframe>
+```
+
+Link previews (Slack, iMessage, email) come from the Open Graph tags in
+`index.html` and `docs/og.jpg`; regenerate that image if the figure changes
+substantially.
